@@ -1,0 +1,118 @@
+<div style="background-color: rgb(245, 244, 244);height: 700px;">
+    <h2>Employee List</h2> <br>
+
+<div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-outline-primary btn-sm" [routerLink]="['/admin','add']">Create New Account</button>
+        </div>
+
+        <div class="col">
+            <button class="btn btn-outline-primary btn-sm" [routerLink]="['/admin','view']">View TimeSheet</button>
+        </div>
+       
+
+
+        <div class="col">
+            <button class="btn btn-outline-primary btn-sm" (click)="openModal(viewLeave)">View Leave Request</button>
+        </div>
+        <div class="col">
+            <input type="text" name="search" placeholder="search..." [(ngModel)]="term" style="margin-left: 10px;"><br><br>
+
+        </div>
+        <div class="col" style="margin-left: 500px;">
+            <button class="btn btn-outline-warning btn-sm"  (click)="logout()" style="margin-right: 10px;">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> LogOut
+            </button>
+        </div>
+    </div>
+    <ng-template #viewLeave>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Leave Requests</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Emp Id</th>
+                        <th>Name</th>
+                        <th>Leave Type</th>
+                        <th>From</th>
+                        <th>No of days</th>
+                        <!-- <th>Total Hours</th> -->
+                        <!-- <th>Gender</th>-->
+                        <th>Actions</th> 
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    <tr
+                        *ngFor="let u of leaveArray ">
+            
+                        <td>{{u.empid}}</td>
+            
+                        <td>{{u.name}}</td>
+                        <td>{{u.leavetype}}</td>
+                        <td>{{u.leavedate}}</td>
+                        <td>{{u.nodays}}</td>
+                        <td>
+                            <button (click)="approveLeave(u)" class="btn btn-outline-success">
+                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                 Approve</button><br>
+                            <button (click)="rejectLeave(u)" class="btn btn-outline-danger">
+                                <i class="fa fa-ban" aria-hidden="true"></i>
+                                Reject</button>
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-template>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th (click)="changeOrder('name')">Name</th>
+                <th (click)="changeOrder('email')">Email</th>
+                <th (click)="changeOrder('phonenum')">Phone number</th>
+                <th (click)="changeOrder('designation')">Designation</th>
+                <th (click)="changeOrder('age')">Age</th>
+                <th (click)="changeOrder('gender')">Gender</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr
+                *ngFor="let u of empArray |filter:term  | paginate: { itemsPerPage: 5, currentPage: p }  | orderBy: order:reverse ">
+
+
+                <td>{{u.name}}</td>
+                <td>{{u.email}}</td>
+                <td>{{u.phonenum}}</td>
+                <td>{{u.designation}}</td>
+                <td>{{u.age}}</td>
+                <td>{{u.gender}}</td>
+                <td>
+                    <button [routerLink]="['/admin','edit',u.id]" class="btn btn-outline-success">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        Edit Account</button> &nbsp;
+
+                    <button (click)="deleteEmployee(u.id)" class="btn btn-outline-success">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        Delete Account</button>
+                
+                </td>
+
+              
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<pagination-controls (pageChange)="p = $event" style="float: right;"></pagination-controls>
+</div>
